@@ -498,11 +498,7 @@ FORMATO: {"numero_factura":"string|null","fecha_emision":"yyyy-mm-dd|null","prov
     body: JSON.stringify({
       model: 'claude-sonnet-4-5', max_tokens: 2000,
       system: systemPrompt,
-      messages: [{ role: 'user', content: 'Factura:
-
-' + facturaTexto + '
-
-JSON.' }],
+      messages: [{ role: 'user', content: 'Factura:\n\n' + facturaTexto + '\n\nJSON.' }],
     }),
   });
   if(!res.ok) throw new Error('Claude error ' + res.status);
