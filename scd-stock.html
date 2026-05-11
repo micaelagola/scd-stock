@@ -482,8 +482,7 @@ async function sha256(buf) {
   return hash;
 }
 async function callClaude(facturaTexto) {
-  const catalogo = productosCache.map(p => `${p.sku} | ${p.descripcion}${p.marca?' ('+p.marca+')':''}`).join('
-');
+  const catalogo = productosCache.map(p => `${p.sku} | ${p.descripcion}${p.marca?' ('+p.marca+')':''}`).join('\n');
   const systemPrompt = `Sos un parser experto de facturas. Extraé datos estructurados y matcheá cada línea con un SKU del catálogo.
 CATÁLOGO: ${catalogo}
 REGLAS: 1. SKU textual → usalo, confianza 0.95+. 2. Coincidencia descripción → matchealo, 0.7-0.9. 3. Sin match → sku_detectado=null. 4. Fecha ISO yyyy-mm-dd. 5. Cantidad positiva. 6. Solo JSON válido.
