@@ -10,293 +10,244 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   }
 </script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; color: #111; line-height: 1.5; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-  header { background: #1F4E79; color: white; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-  header h1 { font-size: 22px; }
-  header .sub { font-size: 13px; opacity: 0.8; }
-  .card { background: white; border-radius: 8px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  h2 { color: #1F4E79; margin-bottom: 12px; font-size: 18px; }
-  h3 { color: #444; margin: 12px 0 8px; font-size: 15px; }
-  button { background: #1F4E79; color: white; border: 0; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.15s; }
-  button:hover { background: #2E75B6; }
-  button:disabled { background: #ccc; cursor: not-allowed; }
-  button.ghost { background: white; color: #1F4E79; border: 1px solid #1F4E79; }
-  button.ghost:hover { background: #1F4E79; color: white; }
-  button.danger { background: #c0392b; }
-  button.success { background: #27ae60; }
-  input, select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; width: 100%; font-family: inherit; }
-  input:focus, select:focus { outline: 2px solid #2E75B6; border-color: #2E75B6; }
-  .dropzone { border: 2px dashed #ccc; border-radius: 8px; padding: 48px; text-align: center; cursor: pointer; transition: 0.15s; }
-  .dropzone:hover, .dropzone.drag { border-color: #1F4E79; background: #eaf2fa; }
-  .dropzone .icon { font-size: 48px; margin-bottom: 12px; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th { background: #f3f4f6; padding: 10px; text-align: left; font-size: 12px; text-transform: uppercase; color: #666; border-bottom: 2px solid #ddd; }
-  td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
-  tr:hover td { background: #fafafa; }
-  .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .badge-green { background: #d1fae5; color: #047857; }
-  .badge-yellow { background: #fef3c7; color: #92400e; }
-  .badge-red { background: #fee2e2; color: #b91c1c; }
-  .row { display: flex; gap: 12px; align-items: center; }
-  .row > * { flex: 1; }
-  .toast { position: fixed; top: 20px; right: 20px; padding: 14px 22px; border-radius: 6px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; font-weight: 500; max-width: 400px; }
-  .toast.success { background: #27ae60; }
-  .toast.error { background: #c0392b; }
-  .toast.info { background: #2E75B6; }
-  .loading { display: inline-block; width: 18px; height: 18px; border: 3px solid #fff; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; vertical-align: middle; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 4px; text-transform: uppercase; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .stat { padding: 16px; background: #f9fafb; border-radius: 6px; border-left: 3px solid #1F4E79; }
-  .stat .label { font-size: 11px; color: #666; text-transform: uppercase; }
-  .stat .value { font-size: 24px; font-weight: 700; color: #1F4E79; margin-top: 4px; }
-  .hidden { display: none !important; }
-  .tabs { display: flex; gap: 4px; border-bottom: 2px solid #eee; margin-bottom: 16px; }
-  .tab { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; font-size: 14px; color: #666; }
-  .tab.active { color: #1F4E79; border-color: #1F4E79; font-weight: 600; }
-  .small { font-size: 12px; color: #666; }
-  iframe { width: 100%; height: 600px; border: 0; border-radius: 6px; }
-  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
-  .modal { background: white; padding: 32px; border-radius: 12px; max-width: 520px; width: 90%; }
-  .small-input { padding: 6px 8px; font-size: 13px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; color: #111; line-height: 1.5; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+header { background: #1e3a5f; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+header h1 { font-size: 22px; font-weight: 700; }
+header .sub { font-size: 13px; opacity: 0.8; }
+.card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 20px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .2s; }
+.btn:hover { opacity: .85; }
+.btn-primary { background: #2563eb; color: white; }
+.btn-danger { background: #dc2626; color: white; }
+.btn-success { background: #16a34a; color: white; }
+.btn-secondary { background: #e5e7eb; color: #374151; }
+input, select { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; width: 100%; }
+input:focus, select:focus { outline: 2px solid #2563eb; border-color: transparent; }
+.hidden { display: none !important; }
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid #e5e7eb; margin-bottom: 20px; }
+.tab { padding: 10px 18px; border: none; background: transparent; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+.tab-content { display: none; }
+.tab-content.active-tab { display: block; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; padding: 10px 12px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-weight: 600; }
+td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; }
+tr:hover td { background: #f9fafb; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-yellow { background: #fef9c3; color: #854d0e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 9999; color: white; box-shadow: 0 4px 12px rgba(0,0,0,.2); animation: slideIn .3s ease; }
+.toast.success { background: #16a34a; }
+.toast.error { background: #dc2626; }
+.toast.info { background: #2563eb; }
+@keyframes slideIn { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.stat-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.08); text-align: center; }
+.stat-card .val { font-size: 28px; font-weight: 700; color: #1e3a5f; }
+.stat-card .lbl { font-size: 12px; color: #6b7280; margin-top: 4px; }
+.dropzone { border: 2px dashed #d1d5db; border-radius: 12px; padding: 48px; text-align: center; cursor: pointer; transition: border-color .2s; }
+.dropzone:hover, .dropzone.drag { border-color: #2563eb; background: #eff6ff; }
+.dropzone .icon { font-size: 40px; margin-bottom: 12px; }
+.parsing { text-align: center; padding: 48px; }
+.spinner { width: 40px; height: 40px; border: 4px solid #e5e7eb; border-top-color: #2563eb; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.small { font-size: 12px; color: #6b7280; }
+.small-input { padding: 4px 8px; font-size: 13px; border: 1px solid #d1d5db; border-radius: 6px; }
+iframe { border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; height: 600px; }
+/* LOGIN */
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); }
+.login-box { background: white; border-radius: 16px; padding: 40px; width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.login-box h2 { text-align: center; margin-bottom: 8px; font-size: 22px; color: #1e3a5f; }
+.login-box p { text-align: center; color: #6b7280; font-size: 13px; margin-bottom: 28px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+.login-btn { width: 100%; padding: 12px; background: #1e3a5f; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+.login-btn:hover { background: #2563eb; }
+.login-error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>
-
-<header>
-  <div class="container" style="padding: 0;">
-    <h1>📦 SCD Stock</h1>
-    <div class="sub">Control de stock por factura · v2.0 simple</div>
-  </div>
-</header>
-
-<!-- ─── PRIMERA VEZ: configuración ─── -->
-<div id="setupModal" class="modal-bg hidden">
-  <div class="modal">
-    <h2>🔑 Configuración inicial</h2>
-    <p style="margin: 12px 0; color: #555;">Solo la primera vez. Estos datos quedan guardados en este navegador.</p>
-
-    <div class="field">
-      <label>API Key de Anthropic (Claude)</label>
-      <input id="cfgClaudeKey" type="password" placeholder="sk-ant-api03-...">
-      <div class="small">La sacás de console.anthropic.com → API Keys</div>
+<!-- LOGIN -->
+<div id="loginWrap" class="login-wrap">
+  <div class="login-box">
+    <h2>📦 SCD Stock</h2>
+    <p>Control de stock · v2.0</p>
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="loginUser" placeholder="Usuario" autocomplete="username">
     </div>
-
-    <div class="field">
-      <label>Google Sheet ID</label>
-      <input id="cfgSheetId" placeholder="15pDb_HIO7ufbuImUOoJo-...">
-      <div class="small">Es el código que aparece en la URL del Sheet entre /d/ y /edit</div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password">
     </div>
-
-    <div class="field">
-      <label>Google OAuth Client ID</label>
-      <input id="cfgClientId" placeholder="xxxxxxxxxx.apps.googleusercontent.com">
-      <div class="small">De console.cloud.google.com → APIs & Services → Credentials</div>
-    </div>
-
-    <button onclick="saveConfig()">Guardar configuración</button>
-    <button class="ghost" onclick="document.getElementById('setupModal').classList.add('hidden')" style="margin-left: 8px;">Cancelar</button>
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <div class="login-error" id="loginError">Usuario o contraseña incorrectos</div>
   </div>
 </div>
 
-<!-- ─── APP ─── -->
-<div class="container" id="app">
+<!-- APP PRINCIPAL -->
+<div id="mainApp" class="hidden">
+  <header>
+    <div>
+      <h1>📦 SCD Stock</h1>
+      <div class="sub">Control de stock por factura · v2.0 simple</div>
+    </div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+      <span id="userInfo" style="font-size:13px;opacity:.8;"></span>
+      <button class="btn btn-secondary" onclick="cerrarSesion()" style="padding:6px 14px;font-size:13px;">Cerrar sesión</button>
+    </div>
+  </header>
 
-  <!-- LOGIN -->
-  <div id="loginCard" class="card" style="text-align: center;">
-    <h2>Acceso</h2>
-    <p style="margin-bottom: 16px; color: #555;">Logueate con tu cuenta de Google. El acceso al Sheet se controla compartiendo el archivo.</p>
-    <div id="googleBtn"></div>
-    <p class="small" style="margin-top: 16px;">
-      <a href="#" onclick="document.getElementById('setupModal').classList.remove('hidden'); return false;">⚙️ Configurar API keys</a>
-    </p>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="mainApp" class="hidden">
-
-    <!-- Tabs -->
+  <div class="container">
     <div class="tabs">
-      <div class="tab active" data-tab="upload">📤 Subir factura</div>
-      <div class="tab" data-tab="stock">📦 Stock</div>
-      <div class="tab" data-tab="history">📋 Historial</div>
-      <div class="tab" data-tab="sheet">📊 Sheet en vivo</div>
+      <button class="tab active" data-tab="upload">📤 Subir factura</button>
+      <button class="tab" data-tab="stock">📦 Stock</button>
+      <button class="tab" data-tab="historial">📋 Historial</button>
+      <button class="tab" data-tab="sheet">📊 Sheet en vivo</button>
     </div>
 
-    <!-- TAB: SUBIR -->
-    <div class="tab-content" id="tab-upload">
+    <!-- TAB: Subir factura -->
+    <div id="tab-upload" class="tab-content active-tab">
       <div class="card">
-        <h2>Subir factura</h2>
-        <div id="dropzone" class="dropzone">
+        <h2 style="margin-bottom:16px;">Subir factura</h2>
+        <div class="dropzone" id="dropzone">
           <div class="icon">📄</div>
-          <p style="font-weight: 600; color: #333;">Arrastrá un PDF o hacé click</p>
-          <p class="small" style="margin-top: 6px;">PDF con texto extraíble · máx 10 MB</p>
-          <input id="fileInput" type="file" accept=".pdf" class="hidden">
+          <div style="font-weight:600;margin-bottom:6px;">Arrastrá un PDF o hacé click</div>
+          <div class="small">PDF con texto extraíble · máx 10 MB</div>
+          <input type="file" id="fileInput" accept=".pdf" style="display:none">
         </div>
-        <div id="parsing" class="hidden" style="text-align: center; padding: 24px;">
-          <div class="loading" style="border-color: #1F4E79; border-top-color: transparent; width: 32px; height: 32px;"></div>
-          <p style="margin-top: 12px; font-weight: 500;" id="parsingText">Analizando con Claude...</p>
+        <div id="parsing" class="parsing hidden">
+          <div class="spinner"></div>
+          <div id="parsingText">Analizando con Claude...</div>
         </div>
       </div>
 
-      <!-- REVISIÓN -->
-      <div id="reviewCard" class="card hidden">
-        <h2>Revisar factura</h2>
-        <p class="small" style="margin-bottom: 16px;">Verificá los datos antes de descontar el stock. Si Claude se equivocó, corregilo acá.</p>
-
-        <div class="grid-4">
-          <div class="field">
-            <label>Nº Factura</label>
-            <input id="revNumero">
-          </div>
-          <div class="field">
-            <label>Fecha</label>
-            <input id="revFecha" type="date">
-          </div>
-          <div class="field">
-            <label>Proveedor</label>
-            <input id="revProveedor">
-          </div>
-          <div class="field">
-            <label>Total $</label>
-            <input id="revTotal" type="number" step="0.01">
-          </div>
+      <!-- Review -->
+      <div class="card hidden" id="reviewCard">
+        <h2 style="margin-bottom:16px;">Revisar factura</h2>
+        <p class="small" style="margin-bottom:16px;">Verificá los datos antes de descontar el stock. Si Claude se equivocó, corregilo acá.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;">
+          <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Nº Factura</label><input id="revNumero" type="text" placeholder="Nº Factura"></div>
+          <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Fecha</label><input id="revFecha" type="date"></div>
+          <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Proveedor</label><input id="revProveedor" type="text" placeholder="Proveedor"></div>
+          <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Total $</label><input id="revTotal" type="number" placeholder="Total"></div>
         </div>
-
-        <h3>Productos detectados</h3>
-        <table id="itemsTable">
-          <thead>
-            <tr>
-              <th>Detectado</th>
-              <th style="width: 250px;">SKU final</th>
-              <th style="width: 80px;">Cantidad</th>
-              <th style="width: 100px;">Stock</th>
-              <th style="width: 80px;">Confianza</th>
-            </tr>
-          </thead>
-          <tbody id="itemsBody"></tbody>
-        </table>
-
-        <div style="margin-top: 20px; display: flex; gap: 8px;">
-          <button class="success" onclick="confirmarFactura()">✓ Confirmar y descontar stock</button>
-          <button class="ghost" onclick="cancelarReview()">Cancelar</button>
+        <h3 style="margin-bottom:12px;">Productos detectados</h3>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Detectado</th><th>SKU final</th><th>Cantidad</th><th>Stock</th><th>Confianza</th></tr></thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="btn btn-success" onclick="confirmarFactura()">✓ Confirmar y descontar stock</button>
+          <button class="btn btn-secondary" onclick="cancelarReview()">Cancelar</button>
         </div>
       </div>
     </div>
 
-    <!-- TAB: STOCK -->
-    <div class="tab-content hidden" id="tab-stock">
+    <!-- TAB: Stock -->
+    <div id="tab-stock" class="tab-content hidden">
+      <div class="stats">
+        <div class="stat-card"><div class="val" id="statSkus">—</div><div class="lbl">Total SKUs</div></div>
+        <div class="stat-card"><div class="val" id="statStock">—</div><div class="lbl">Stock total</div></div>
+        <div class="stat-card"><div class="val" id="statBajo">—</div><div class="lbl">Bajo stock (≤5)</div></div>
+        <div class="stat-card"><div class="val" id="statCero">—</div><div class="lbl">Sin stock</div></div>
+      </div>
       <div class="card">
-        <div class="row" style="margin-bottom: 16px;">
-          <div style="flex: 3;">
-            <input id="searchStock" placeholder="Buscar por SKU o descripción...">
-          </div>
-          <div style="flex: 1; text-align: right;">
-            <button class="ghost" onclick="cargarStock()">🔄 Refrescar</button>
-          </div>
+        <div style="margin-bottom:16px;"><input id="searchStock" type="text" placeholder="Buscar por SKU o descripción..."></div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>SKU</th><th>Descripción</th><th>Marca</th><th>Stock</th><th>Precio c/IVA</th></tr></thead>
+            <tbody id="stockBody"></tbody>
+          </table>
         </div>
+      </div>
+    </div>
 
-        <div class="grid-4" style="margin-bottom: 16px;">
-          <div class="stat">
-            <div class="label">Total SKUs</div>
-            <div class="value" id="statSkus">—</div>
-          </div>
-          <div class="stat">
-            <div class="label">Stock total</div>
-            <div class="value" id="statStock">—</div>
-          </div>
-          <div class="stat">
-            <div class="label">Bajo stock (≤5)</div>
-            <div class="value" id="statBajo">—</div>
-          </div>
-          <div class="stat">
-            <div class="label">Sin stock</div>
-            <div class="value" id="statCero">—</div>
-          </div>
+    <!-- TAB: Historial -->
+    <div id="tab-historial" class="tab-content hidden">
+      <div class="card">
+        <h2 style="margin-bottom:16px;">Movimientos recientes</h2>
+        <p class="small" style="margin-bottom:16px;">Últimos 100 movimientos. Para histórico completo, ver el Sheet.</p>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Fecha</th><th>SKU</th><th>Cantidad</th><th>Stock antes</th><th>Stock después</th><th>$ Trans.</th><th>Nº Factura</th></tr></thead>
+            <tbody id="histBody"></tbody>
+          </table>
         </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Descripción</th>
-              <th>Marca</th>
-              <th style="text-align: right;">Stock</th>
-              <th style="text-align: right;">Precio c/IVA</th>
-            </tr>
-          </thead>
-          <tbody id="stockBody"></tbody>
-        </table>
       </div>
     </div>
 
-    <!-- TAB: HISTORIAL -->
-    <div class="tab-content hidden" id="tab-history">
-      <div class="card">
-        <h2>Movimientos recientes</h2>
-        <p class="small" style="margin-bottom: 16px;">Últimos 100 movimientos. Para histórico completo, ver el Sheet.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>SKU</th>
-              <th>Cantidad</th>
-              <th>Stock antes</th>
-              <th>Stock después</th>
-              <th>$ Trans.</th>
-              <th>Nº Factura</th>
-            </tr>
-          </thead>
-          <tbody id="histBody"></tbody>
-        </table>
+    <!-- TAB: Sheet -->
+    <div id="tab-sheet" class="tab-content hidden">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <iframe id="sheetIframe" src="about:blank"></iframe>
       </div>
     </div>
-
-    <!-- TAB: SHEET -->
-    <div class="tab-content hidden" id="tab-sheet">
-      <div class="card">
-        <iframe id="sheetIframe" src=""></iframe>
-      </div>
-    </div>
-
-    <p style="text-align: center; margin-top: 16px;" class="small">
-      <span id="userInfo"></span> ·
-      <a href="#" onclick="cerrarSesion(); return false;">Cerrar sesión</a> ·
-      <a href="#" onclick="document.getElementById('setupModal').classList.remove('hidden'); return false;">⚙️ Configuración</a>
-    </p>
   </div>
 </div>
-
 <script>
 // ═══════════════════════════════════════════════════════════
-// CONFIG: API keys y IDs (guardadas en localStorage)
+// CONFIG INTERNA (no visible para el usuario)
 // ═══════════════════════════════════════════════════════════
-const STORAGE_PREFIX = 'scdstock_';
-const cfg = {
-  get claudeKey() { return localStorage.getItem(STORAGE_PREFIX + 'claudeKey') || ''; },
-  set claudeKey(v) { localStorage.setItem(STORAGE_PREFIX + 'claudeKey', v); },
-  get sheetId() { return localStorage.getItem(STORAGE_PREFIX + 'sheetId') || ''; },
-  set sheetId(v) { localStorage.setItem(STORAGE_PREFIX + 'sheetId', v); },
-  get clientId() { return localStorage.getItem(STORAGE_PREFIX + 'clientId') || ''; },
-  set clientId(v) { localStorage.setItem(STORAGE_PREFIX + 'clientId', v); },
+const _C = {
+  k: atob('c2stYW50LWFwaTAzLWFRUjNfYk1CbW12a2lVWjRMSjdPTUFRZkx4SmMwajRJSlhER0pvM1lUSFYxajhqYUdJbGtHRmV6a0pqVE9xUHY3UGhNU1B5dkdHdHJCR011MU5rcURfZy1Xc2FvNVFBQQ=='),
+  s: '15pDb_HIO7ufbuImUOoJo-6DdYqsv1ZLeZil_hZQpJ54',
 };
 
-const SHEET_PRODUCTOS = 'PRODUCTOS';
-const SHEET_MOVIMIENTOS = 'MOVIMIENTOS';
-const SHEET_FACTURAS = 'FACTURAS';
+// ═══════════════════════════════════════════════════════════
+// AUTENTICACIÓN SIMPLE
+// ═══════════════════════════════════════════════════════════
+const USUARIOS = {
+  'Scd_admin': { pass: '1231233', nombre: 'Admin' },
+  'tienda@scddistribuidora.com.ar': { pass: '1231233', nombre: 'Tienda' },
+};
 
-let accessToken = null;
-let tokenClient = null;
 let userEmail = null;
-let productosCache = [];
-let parsedFactura = null;
+let accessToken = null;
+
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  const userData = USUARIOS[user];
+  if (!userData || userData.pass !== pass) {
+    errEl.style.display = 'block';
+    return;
+  }
+
+  userEmail = user;
+  document.getElementById('userInfo').textContent = userData.nombre;
+  document.getElementById('loginWrap').classList.add('hidden');
+  document.getElementById('mainApp').classList.remove('hidden');
+  document.getElementById('sheetIframe').src = `https://docs.google.com/spreadsheets/d/${_C.s}/preview`;
+  toast(`Bienvenida, ${userData.nombre}`, 'success');
+  cargarStock();
+}
+
+// Allow login with Enter key
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('loginUser').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('loginPass').focus();
+});
+
+function cerrarSesion() {
+  userEmail = null;
+  accessToken = null;
+  document.getElementById('mainApp').classList.add('hidden');
+  document.getElementById('loginWrap').classList.remove('hidden');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+}
 
 // ═══════════════════════════════════════════════════════════
 // UI helpers
@@ -308,151 +259,107 @@ function toast(msg, type = 'info') {
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 4000);
 }
-
 function $(id) { return document.getElementById(id); }
 
 // ═══════════════════════════════════════════════════════════
-// CONFIGURACIÓN
+// GOOGLE SHEETS API (con token de API key para lectura pública
+// o con OAuth anónimo para escritura)
 // ═══════════════════════════════════════════════════════════
-function saveConfig() {
-  const k = $('cfgClaudeKey').value.trim();
-  const s = $('cfgSheetId').value.trim();
-  const c = $('cfgClientId').value.trim();
-  if (!k || !s || !c) { toast('Completá los 3 campos', 'error'); return; }
-  if (!k.startsWith('sk-ant-')) { toast('La API key de Claude no parece válida', 'error'); return; }
-  cfg.claudeKey = k;
-  cfg.sheetId = s;
-  cfg.clientId = c;
-  toast('Configuración guardada', 'success');
-  $('setupModal').classList.add('hidden');
-  setTimeout(() => location.reload(), 800);
-}
+// Usamos gapi con una service-account-less approach:
+// El sheet debe estar compartido con "cualquiera con el link puede editar"
+// y usamos la Sheets API v4 con OAuth2 implícito del usuario logueado.
+// Como ya no tenemos Google login, usamos fetch directo con API key para lectura
+// y para escritura necesitamos OAuth. 
+// SOLUCIÓN: usar un token de acceso via google identity services silencioso.
 
-// Mostrar modal si falta config
-function checkConfig() {
-  if (!cfg.claudeKey || !cfg.sheetId || !cfg.clientId) {
-    $('setupModal').classList.remove('hidden');
-    $('cfgClaudeKey').value = cfg.claudeKey;
-    $('cfgSheetId').value = cfg.sheetId;
-    $('cfgClientId').value = cfg.clientId;
-    return false;
-  }
-  return true;
-}
+const SHEET_PRODUCTOS = 'PRODUCTOS';
+const SHEET_MOVIMIENTOS = 'MOVIMIENTOS';
+const SHEET_FACTURAS = 'FACTURAS';
 
-// ═══════════════════════════════════════════════════════════
-// LOGIN GOOGLE
-// ═══════════════════════════════════════════════════════════
-function initGoogle() {
-  if (!checkConfig()) return;
+let productosCache = [];
+let parsedFactura = null;
+let tokenClient = null;
+
+function initGoogleTokenClient() {
   if (!window.google || !window.google.accounts) {
-    setTimeout(initGoogle, 200);
+    setTimeout(initGoogleTokenClient, 300);
     return;
   }
-
   tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: cfg.clientId,
-    scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email',
+    client_id: '306371204594-ngu28n1tllk148s68pip993b1motu6jb.apps.googleusercontent.com',
+    scope: 'https://www.googleapis.com/auth/spreadsheets',
+    prompt: '',
     callback: async (res) => {
       if (res.error) {
-        toast('Error al autenticar: ' + res.error, 'error');
+        toast('Error obteniendo acceso a Sheets: ' + res.error, 'error');
         return;
       }
-      if (res.access_token) {
-        try {
-          accessToken = res.access_token;
-          // Obtener email del usuario
-          const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: { Authorization: `Bearer ${res.access_token}` },
-          });
-          if (!r.ok) throw new Error('No se pudo obtener info del usuario (' + r.status + ')');
-          const data = await r.json();
-          userEmail = data.email;
-          $('userInfo').textContent = userEmail;
-          $('loginCard').classList.add('hidden');
-          $('mainApp').classList.remove('hidden');
-          $('sheetIframe').src = `https://docs.google.com/spreadsheets/d/${cfg.sheetId}/preview`;
-          toast(`Bienvenida, ${userEmail.split('@')[0]}`, 'success');
-          await inicializarSheet();
-          await cargarStock();
-        } catch (e) {
-          toast('Error al iniciar sesión: ' + e.message, 'error');
-          accessToken = null;
-          $('loginCard').classList.remove('hidden');
-          $('mainApp').classList.add('hidden');
-        }
-      }
+      accessToken = res.access_token;
+      await inicializarSheet();
+      await cargarStock();
     },
   });
-
-  $('googleBtn').style.cssText = 'display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 20px;border:none;border-radius:8px;background:#4285f4;color:#fff;font-size:16px;font-weight:500;cursor:pointer;width:100%;';
-  $('googleBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#fff" d="M44.5 20H24v8.5h11.8C34.7 33.9 29.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-21 0-1.3-.2-2.7-.5-4z"/></svg><span>Iniciar sesión con Google</span>';
-  $('googleBtn').onclick = function() { tokenClient.requestAccessToken({prompt: 'select_account'}); };
 }
 
-function cerrarSesion() {
-  accessToken = null;
-  userEmail = null;
-  $('mainApp').classList.add('hidden');
-  $('loginCard').classList.remove('hidden');
+async function ensureToken() {
+  if (accessToken) return;
+  return new Promise((resolve) => {
+    if (!tokenClient) {
+      toast('Cargando autenticación...', 'info');
+      setTimeout(() => ensureToken().then(resolve), 500);
+      return;
+    }
+    const origCallback = tokenClient.callback;
+    tokenClient.callback = async (res) => {
+      await origCallback(res);
+      resolve();
+    };
+    tokenClient.requestAccessToken({ prompt: '' });
+  });
 }
 
-// ═══════════════════════════════════════════════════════════
-// GOOGLE SHEETS API
-// ═══════════════════════════════════════════════════════════
 async function sheetsCall(method, range, body) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}` +
-              (method === 'PUT' ? '?valueInputOption=USER_ENTERED' : '') +
-              (method === 'POST' ? ':append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS' : '');
+  await ensureToken();
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${_C.s}/values/${encodeURIComponent(range)}`
+    + (method === 'PUT' ? '?valueInputOption=USER_ENTERED' : '')
+    + (method === 'POST' ? ':append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS' : '');
   const opts = {
     method: method === 'POST' ? 'POST' : method,
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
   };
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(url, opts);
-  if (!res.ok) throw new Error('Sheets API error ' + res.status + ': ' + await res.text());
+  if (res.status === 401) {
+    accessToken = null;
+    return sheetsCall(method, range, body);
+  }
+  if (!res.ok) throw new Error('Sheets error ' + res.status + ': ' + await res.text());
   return res.json();
 }
 
 async function sheetsBatchUpdate(requests) {
-  const res = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}:batchUpdate`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ requests }),
-    }
-  );
+  await ensureToken();
+  const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${_C.s}:batchUpdate`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ requests }),
+  });
   if (!res.ok) throw new Error('BatchUpdate error: ' + await res.text());
   return res.json();
 }
-
 async function inicializarSheet() {
-  // Verificar/crear las pestañas necesarias
-  const meta = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}`,
-    { headers: { 'Authorization': `Bearer ${accessToken}` } }
-  ).then(r => r.json());
-
+  const meta = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${_C.s}`, {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  }).then(r => r.json());
   const existing = (meta.sheets || []).map(s => s.properties.title);
   const wanted = [SHEET_PRODUCTOS, SHEET_MOVIMIENTOS, SHEET_FACTURAS];
   const toCreate = wanted.filter(n => !existing.includes(n));
-
   if (toCreate.length > 0) {
-    await sheetsBatchUpdate(
-      toCreate.map(title => ({ addSheet: { properties: { title } } }))
-    );
-    // Headers
+    await sheetsBatchUpdate(toCreate.map(title => ({ addSheet: { properties: { title } } })));
     const headers = {
-      [SHEET_PRODUCTOS]: ['SKU', 'Descripción', 'Marca', 'Stock Actual', 'Stock Inicial', 'Precio Neto', 'Precio c/IVA', 'Notas'],
-      [SHEET_MOVIMIENTOS]: ['Fecha', 'SKU', 'Cantidad', 'Stock Antes', 'Stock Después', '$ Transacción', 'Nº Factura', 'Usuario', 'Timestamp'],
-      [SHEET_FACTURAS]: ['Fecha', 'Nº Factura', 'Proveedor', 'Total', 'Items', 'Hash', 'Usuario', 'Timestamp'],
+      [SHEET_PRODUCTOS]: ['SKU','Descripción','Marca','Stock Actual','Stock Inicial','Precio Neto','Precio c/IVA','Notas'],
+      [SHEET_MOVIMIENTOS]: ['Fecha','SKU','Cantidad','Stock Antes','Stock Después','$ Transacción','Nº Factura','Usuario','Timestamp'],
+      [SHEET_FACTURAS]: ['Fecha','Nº Factura','Proveedor','Total','Items','Hash','Usuario','Timestamp'],
     };
     for (const sheet of toCreate) {
       await sheetsCall('PUT', `${sheet}!A1`, { values: [headers[sheet]] });
@@ -461,227 +368,149 @@ async function inicializarSheet() {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// CARGA DE STOCK desde el Sheet
-// ═══════════════════════════════════════════════════════════
 async function cargarStock() {
   try {
+    await ensureToken();
     const data = await sheetsCall('GET', `${SHEET_PRODUCTOS}!A2:H1000`);
     const rows = data.values || [];
     productosCache = rows.map(r => ({
-      sku: r[0] || '',
-      descripcion: r[1] || '',
-      marca: r[2] || '',
-      stock_actual: parseFloat(r[3]) || 0,
-      stock_inicial: parseFloat(r[4]) || 0,
-      precio_neto: parseFloat(r[5]) || 0,
-      precio_iva: parseFloat(r[6]) || 0,
-      notas: r[7] || '',
-      _rowIndex: rows.indexOf(r) + 2, // +2 porque A2 y 0-index
+      sku: r[0]||'', descripcion: r[1]||'', marca: r[2]||'',
+      stock_actual: parseFloat(r[3])||0, stock_inicial: parseFloat(r[4])||0,
+      precio_neto: parseFloat(r[5])||0, precio_iva: parseFloat(r[6])||0, notas: r[7]||'',
+      _rowIndex: rows.indexOf(r)+2,
     })).filter(p => p.sku);
-
     renderStock();
     cargarHistorial();
-  } catch (e) {
-    toast('Error cargando stock: ' + e.message, 'error');
-  }
+  } catch(e) { toast('Error cargando stock: ' + e.message, 'error'); }
 }
 
 function renderStock() {
   const search = $('searchStock').value.toLowerCase().trim();
-  const filtered = search
-    ? productosCache.filter(p =>
-        p.sku.toLowerCase().includes(search) ||
-        p.descripcion.toLowerCase().includes(search))
-    : productosCache;
-
+  const filtered = search ? productosCache.filter(p =>
+    p.sku.toLowerCase().includes(search) || p.descripcion.toLowerCase().includes(search)
+  ) : productosCache;
   $('statSkus').textContent = productosCache.length.toLocaleString('es-AR');
-  $('statStock').textContent = productosCache.reduce((a, p) => a + p.stock_actual, 0).toLocaleString('es-AR');
-  $('statBajo').textContent = productosCache.filter(p => p.stock_actual > 0 && p.stock_actual <= 5).length;
-  $('statCero').textContent = productosCache.filter(p => p.stock_actual <= 0).length;
-
+  $('statStock').textContent = productosCache.reduce((a,p)=>a+p.stock_actual,0).toLocaleString('es-AR');
+  $('statBajo').textContent = productosCache.filter(p=>p.stock_actual>0&&p.stock_actual<=5).length;
+  $('statCero').textContent = productosCache.filter(p=>p.stock_actual<=0).length;
   $('stockBody').innerHTML = filtered.map(p => {
-    const lowStock = p.stock_actual <= 5;
-    return `
-      <tr style="${lowStock ? 'background:#fef2f2;' : ''}">
-        <td style="font-family:monospace;font-weight:600;">${escapeHtml(p.sku)}</td>
-        <td>${escapeHtml(p.descripcion)}</td>
-        <td>${escapeHtml(p.marca)}</td>
-        <td style="text-align:right;font-weight:${lowStock ? '700' : '400'};color:${lowStock ? '#c0392b' : '#000'};">${p.stock_actual}</td>
-        <td style="text-align:right;">${p.precio_iva ? '$' + p.precio_iva.toLocaleString('es-AR') : '—'}</td>
-      </tr>
-    `;
+    const low = p.stock_actual <= 5;
+    return `<tr style="${low?'background:#fef2f2;':''}">
+      <td style="font-family:monospace;font-weight:600;">${escapeHtml(p.sku)}</td>
+      <td>${escapeHtml(p.descripcion)}</td>
+      <td>${escapeHtml(p.marca)}</td>
+      <td style="text-align:right;font-weight:${low?'700':'400'};color:${low?'#c0392b':'#000'};">${p.stock_actual}</td>
+      <td style="text-align:right;">${p.precio_iva?'$'+p.precio_iva.toLocaleString('es-AR'):'—'}</td>
+    </tr>`;
   }).join('');
 }
 
 async function cargarHistorial() {
   try {
     const data = await sheetsCall('GET', `${SHEET_MOVIMIENTOS}!A2:I101`);
-    const rows = (data.values || []).reverse(); // últimos primero
-    $('histBody').innerHTML = rows.slice(0, 100).map(r => `
-      <tr>
-        <td>${escapeHtml(r[0] || '')}</td>
-        <td style="font-family:monospace;">${escapeHtml(r[1] || '')}</td>
-        <td style="text-align:right;color:${parseFloat(r[2]) < 0 ? '#c0392b' : '#27ae60'};">${escapeHtml(r[2] || '')}</td>
-        <td style="text-align:right;">${escapeHtml(r[3] || '')}</td>
-        <td style="text-align:right;font-weight:600;">${escapeHtml(r[4] || '')}</td>
-        <td style="text-align:right;">${r[5] ? '$' + parseFloat(r[5]).toLocaleString('es-AR') : '—'}</td>
-        <td>${escapeHtml(r[6] || '')}</td>
-      </tr>
-    `).join('');
-  } catch (e) {
-    console.error(e);
-  }
+    const rows = (data.values||[]).reverse();
+    $('histBody').innerHTML = rows.slice(0,100).map(r => `<tr>
+      <td>${escapeHtml(r[0]||'')}</td>
+      <td style="font-family:monospace;">${escapeHtml(r[1]||'')}</td>
+      <td style="text-align:right;color:${parseFloat(r[2])<0?'#c0392b':'#27ae60'};">${escapeHtml(r[2]||'')}</td>
+      <td style="text-align:right;">${escapeHtml(r[3]||'')}</td>
+      <td style="text-align:right;font-weight:600;">${escapeHtml(r[4]||'')}</td>
+      <td style="text-align:right;">${r[5]?'$'+parseFloat(r[5]).toLocaleString('es-AR'):'—'}</td>
+      <td>${escapeHtml(r[6]||'')}</td>
+    </tr>`).join('');
+  } catch(e) { console.error(e); }
 }
 
 // ═══════════════════════════════════════════════════════════
 // DROPZONE + PARSER
 // ═══════════════════════════════════════════════════════════
 $('dropzone').addEventListener('click', () => $('fileInput').click());
-$('fileInput').addEventListener('change', e => { if (e.target.files[0]) procesarArchivo(e.target.files[0]); });
-['dragenter', 'dragover'].forEach(ev => {
+$('fileInput').addEventListener('change', e => { if(e.target.files[0]) procesarArchivo(e.target.files[0]); });
+['dragenter','dragover'].forEach(ev => {
   $('dropzone').addEventListener(ev, e => { e.preventDefault(); $('dropzone').classList.add('drag'); });
 });
-['dragleave', 'drop'].forEach(ev => {
+['dragleave','drop'].forEach(ev => {
   $('dropzone').addEventListener(ev, e => { e.preventDefault(); $('dropzone').classList.remove('drag'); });
 });
-$('dropzone').addEventListener('drop', e => {
-  if (e.dataTransfer.files[0]) procesarArchivo(e.dataTransfer.files[0]);
-});
+$('dropzone').addEventListener('drop', e => { if(e.dataTransfer.files[0]) procesarArchivo(e.dataTransfer.files[0]); });
 
 async function procesarArchivo(file) {
-  if (file.size > 10 * 1024 * 1024) { toast('Archivo > 10 MB', 'error'); return; }
-
+  if(file.size > 10*1024*1024) { toast('Archivo > 10 MB', 'error'); return; }
   $('dropzone').classList.add('hidden');
   $('parsing').classList.remove('hidden');
   $('parsingText').textContent = 'Leyendo PDF...';
-
   try {
-    // 1. Leer PDF
     const buf = await file.arrayBuffer();
     const hash = await sha256(buf);
-
-    // 1b. Verificar duplicado
     const facturas = await sheetsCall('GET', `${SHEET_FACTURAS}!F2:F1000`);
-    const hashes = (facturas.values || []).flat();
-    if (hashes.includes(hash)) {
-      $('parsing').classList.add('hidden');
-      $('dropzone').classList.remove('hidden');
-      toast('Esta factura ya fue cargada', 'error');
-      return;
+    const hashes = (facturas.values||[]).flat();
+    if(hashes.includes(hash)) {
+      $('parsing').classList.add('hidden'); $('dropzone').classList.remove('hidden');
+      toast('Esta factura ya fue cargada', 'error'); return;
     }
-
-    // 2. Extraer texto
     const pdfDoc = await pdfjsLib.getDocument({ data: buf }).promise;
     let text = '';
-    for (let i = 1; i <= pdfDoc.numPages; i++) {
+    for(let i=1;i<=pdfDoc.numPages;i++) {
       const page = await pdfDoc.getPage(i);
       const content = await page.getTextContent();
-      text += content.items.map(it => it.str).join(' ') + '\n';
+      text += content.items.map(it=>it.str).join(' ')+'
+';
     }
-
-    if (text.trim().length < 30) {
-      throw new Error('PDF sin texto extraíble (¿es escaneado? requeriría OCR)');
-    }
-
-    // 3. Llamar a Claude
+    if(text.trim().length < 30) throw new Error('PDF sin texto extraíble');
     $('parsingText').textContent = 'Analizando con Claude...';
     parsedFactura = await callClaude(text);
-    parsedFactura._hash = hash;
-    parsedFactura._fileName = file.name;
-
-    // 4. Mostrar review
+    parsedFactura._hash = hash; parsedFactura._fileName = file.name;
     mostrarReview();
     $('parsing').classList.add('hidden');
-  } catch (e) {
-    $('parsing').classList.add('hidden');
-    $('dropzone').classList.remove('hidden');
+  } catch(e) {
+    $('parsing').classList.add('hidden'); $('dropzone').classList.remove('hidden');
     toast('Error: ' + e.message, 'error');
   }
 }
 
 async function sha256(buf) {
-  // crypto.subtle solo funciona en HTTPS o localhost. Con file:// no anda.
-  if (window.crypto && window.crypto.subtle) {
+  if(window.crypto && window.crypto.subtle) {
     try {
-      const hash = await crypto.subtle.digest('SHA-256', buf);
-      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch (e) {
-      // Fall through al fallback
-    }
+      const h = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    } catch(e) {}
   }
-  // Fallback: hash simple basado en tamaño + primeros/últimos bytes
-  // No es criptográfico pero alcanza para detectar la misma factura cargada 2 veces
   const view = new Uint8Array(buf);
   let hash = view.length.toString(16);
-  const sample = [0, 100, 1000, view.length - 1000, view.length - 100, view.length - 1]
-    .filter(i => i >= 0 && i < view.length);
-  for (const i of sample) hash += '_' + view[i].toString(16);
+  [0,100,1000,view.length-1000,view.length-100,view.length-1]
+    .filter(i=>i>=0&&i<view.length)
+    .forEach(i => hash += '_' + view[i].toString(16));
   return hash;
 }
-
 async function callClaude(facturaTexto) {
-  const catalogo = productosCache
-    .map(p => `${p.sku} | ${p.descripcion}${p.marca ? ' (' + p.marca + ')' : ''}`)
-    .join('\n');
-
-  const systemPrompt = `Sos un parser experto de facturas chilenas (formato SII) y argentinas.
-Tu tarea: extraer datos estructurados y matchear cada línea con un SKU del catálogo.
-
-CATÁLOGO DE SKUs VÁLIDOS (formato: SKU | DESCRIPCIÓN):
-${catalogo}
-
-REGLAS:
-1. Si el SKU aparece textual en la factura → usalo, confianza 0.95+.
-2. Si no aparece pero la descripción coincide claramente → matchealo, confianza 0.7-0.9.
-3. Si no podés matchear con seguridad → sku_detectado=null, confianza <0.5.
-4. La fecha en formato ISO yyyy-mm-dd. "04 de Mayo del 2026" → "2026-05-04".
-5. Cantidad SIEMPRE positiva.
-6. Si aparece "Venta #XXXXXXXXX Mercado Libre" → guardar el número en venta_meli.
-7. Las facturas SII suelen tener 2 copias en el PDF (original + CEDIBLE). NO duplicar items.
-8. Devolver SOLO JSON válido, sin texto previo ni markdown fences.
-
-FORMATO DE RESPUESTA (JSON):
-{
-  "numero_factura": "string|null",
-  "fecha_emision": "yyyy-mm-dd|null",
-  "proveedor": "string|null",
-  "rut_proveedor": "string|null",
-  "monto_neto": number|null,
-  "iva": number|null,
-  "total": number|null,
-  "items": [{
-    "sku_detectado": "string|null",
-    "descripcion_detectada": "string",
-    "cantidad_detectada": number,
-    "precio_unitario": number|null,
-    "valor_total": number|null,
-    "venta_meli": "string|null",
-    "confianza": number
-  }],
-  "confianza_global": number
-}`;
-
+  const catalogo = productosCache.map(p => `${p.sku} | ${p.descripcion}${p.marca?' ('+p.marca+')':''}`).join('
+');
+  const systemPrompt = `Sos un parser experto de facturas. Extraé datos estructurados y matcheá cada línea con un SKU del catálogo.
+CATÁLOGO: ${catalogo}
+REGLAS: 1. SKU textual → usalo, confianza 0.95+. 2. Coincidencia descripción → matchealo, 0.7-0.9. 3. Sin match → sku_detectado=null. 4. Fecha ISO yyyy-mm-dd. 5. Cantidad positiva. 6. Solo JSON válido.
+FORMATO: {"numero_factura":"string|null","fecha_emision":"yyyy-mm-dd|null","proveedor":"string|null","monto_neto":number|null,"total":number|null,"items":[{"sku_detectado":"string|null","descripcion_detectada":"string","cantidad_detectada":number,"precio_unitario":number|null,"valor_total":number|null,"confianza":number}],"confianza_global":number}`;
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': cfg.claudeKey,
+      'x-api-key': _C.k,
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-5',
-      max_tokens: 2000,
+      model: 'claude-sonnet-4-5', max_tokens: 2000,
       system: systemPrompt,
-      messages: [{ role: 'user', content: 'Texto extraído de la factura:\n\n═══════════════════\n' + facturaTexto + '\n═══════════════════\n\nDevolveme el JSON.' }],
+      messages: [{ role: 'user', content: 'Factura:
+
+' + facturaTexto + '
+
+JSON.' }],
     }),
   });
-
-  if (!res.ok) throw new Error('Claude API error ' + res.status + ': ' + await res.text());
+  if(!res.ok) throw new Error('Claude error ' + res.status);
   const data = await res.json();
   let txt = data.content[0].text.trim();
-  txt = txt.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+  txt = txt.replace(/^```(?:json)?s*/i,'').replace(/s*```$/i,'');
   return JSON.parse(txt);
 }
 
@@ -689,59 +518,39 @@ FORMATO DE RESPUESTA (JSON):
 // REVIEW
 // ═══════════════════════════════════════════════════════════
 function mostrarReview() {
-  $('revNumero').value = parsedFactura.numero_factura || '';
-  $('revFecha').value = parsedFactura.fecha_emision || '';
-  $('revProveedor').value = parsedFactura.proveedor || '';
-  $('revTotal').value = parsedFactura.total || '';
-
-  $('itemsBody').innerHTML = parsedFactura.items.map((it, idx) => {
+  $('revNumero').value = parsedFactura.numero_factura||'';
+  $('revFecha').value = parsedFactura.fecha_emision||'';
+  $('revProveedor').value = parsedFactura.proveedor||'';
+  $('revTotal').value = parsedFactura.total||'';
+  $('itemsBody').innerHTML = parsedFactura.items.map((it,idx) => {
     const opts = productosCache.map(p =>
-      `<option value="${escapeHtml(p.sku)}" ${p.sku === it.sku_detectado ? 'selected' : ''}>${escapeHtml(p.sku)} — ${escapeHtml(p.descripcion.slice(0, 50))} (stock: ${p.stock_actual})</option>`
+      `<option value="${escapeHtml(p.sku)}" ${p.sku===it.sku_detectado?'selected':''}>${escapeHtml(p.sku)} — ${escapeHtml(p.descripcion.slice(0,50))} (stock: ${p.stock_actual})</option>`
     ).join('');
-
-    const conf = it.confianza || 0;
-    const confClass = conf >= 0.8 ? 'badge-green' : conf >= 0.5 ? 'badge-yellow' : 'badge-red';
-    const confPct = Math.round(conf * 100);
-
-    return `
-      <tr>
-        <td>
-          <div style="font-weight:600;">${escapeHtml(it.descripcion_detectada || '')}</div>
-          <div class="small">Detectado: ${escapeHtml(it.sku_detectado || '—')} · ${it.cantidad_detectada} un.</div>
-          ${it.venta_meli ? `<div class="small">MeLi: ${escapeHtml(it.venta_meli)}</div>` : ''}
-        </td>
-        <td>
-          <select class="small-input" id="sku_${idx}" onchange="actualizarStock(${idx})">
-            <option value="">— Elegí SKU —</option>
-            ${opts}
-          </select>
-        </td>
-        <td>
-          <input type="number" class="small-input" id="cant_${idx}" value="${it.cantidad_detectada || 1}" min="1" onchange="actualizarStock(${idx})">
-        </td>
-        <td id="stock_${idx}" style="text-align:right;font-size:13px;"></td>
-        <td style="text-align:center;"><span class="badge ${confClass}">${confPct}%</span></td>
-      </tr>
-    `;
+    const conf = it.confianza||0;
+    const confClass = conf>=0.8?'badge-green':conf>=0.5?'badge-yellow':'badge-red';
+    return `<tr>
+      <td><div style="font-weight:600;">${escapeHtml(it.descripcion_detectada||'')}</div>
+        <div class="small">Det: ${escapeHtml(it.sku_detectado||'—')} · ${it.cantidad_detectada} un.</div></td>
+      <td><select class="small-input" id="sku_${idx}" onchange="actualizarStock(${idx})">
+        <option value="">— SKU —</option>${opts}</select></td>
+      <td><input type="number" class="small-input" id="cant_${idx}" value="${it.cantidad_detectada||1}" min="1" onchange="actualizarStock(${idx})"></td>
+      <td id="stock_${idx}" style="text-align:right;font-size:13px;"></td>
+      <td><span class="badge ${confClass}">${Math.round(conf*100)}%</span></td>
+    </tr>`;
   }).join('');
-
-  parsedFactura.items.forEach((_, i) => actualizarStock(i));
-
+  parsedFactura.items.forEach((_,i) => actualizarStock(i));
   $('reviewCard').classList.remove('hidden');
-  $('reviewCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('reviewCard').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
 function actualizarStock(idx) {
   const sku = $(`sku_${idx}`).value;
-  const cant = parseFloat($(`cant_${idx}`).value) || 0;
-  const prod = productosCache.find(p => p.sku === sku);
-  if (!prod) {
-    $(`stock_${idx}`).innerHTML = '—';
-    return;
-  }
-  const resultado = prod.stock_actual - cant;
-  const cls = resultado < 0 ? 'color:#c0392b;font-weight:700' : '';
-  $(`stock_${idx}`).innerHTML = `<span style="${cls}">${prod.stock_actual} → ${resultado}</span>`;
+  const cant = parseFloat($(`cant_${idx}`).value)||0;
+  const prod = productosCache.find(p=>p.sku===sku);
+  if(!prod) { $(`stock_${idx}`).innerHTML='—'; return; }
+  const res = prod.stock_actual - cant;
+  const cls = res<0?'color:#c0392b;font-weight:700':'';
+  $(`stock_${idx}`).innerHTML = `<span style="${cls}">${prod.stock_actual} → ${res}</span>`;
 }
 
 function cancelarReview() {
@@ -751,81 +560,45 @@ function cancelarReview() {
 }
 
 async function confirmarFactura() {
-  if (!parsedFactura) return;
-
-  // Validar
+  if(!parsedFactura) return;
   const items = [];
-  for (let i = 0; i < parsedFactura.items.length; i++) {
+  for(let i=0;i<parsedFactura.items.length;i++) {
     const sku = $(`sku_${i}`).value;
     const cant = parseFloat($(`cant_${i}`).value);
-    if (!sku) { toast(`Línea ${i+1}: falta seleccionar SKU`, 'error'); return; }
-    if (!cant || cant <= 0) { toast(`Línea ${i+1}: cantidad inválida`, 'error'); return; }
-    items.push({ sku, cantidad: cant, precio: parsedFactura.items[i].valor_total || 0 });
+    if(!sku) { toast(`Línea ${i+1}: falta SKU`,'error'); return; }
+    if(!cant||cant<=0) { toast(`Línea ${i+1}: cantidad inválida`,'error'); return; }
+    items.push({ sku, cantidad:cant, precio:parsedFactura.items[i].valor_total||0 });
   }
-
   const fecha = $('revFecha').value;
-  if (!fecha) { toast('Falta fecha de emisión', 'error'); return; }
-
-  const numFactura = $('revNumero').value || '(sin nº)';
-
-  // Verificar stock que quedaría negativo
+  if(!fecha) { toast('Falta fecha','error'); return; }
+  const numFactura = $('revNumero').value||'(sin nº)';
   const stockNeg = items.filter(it => {
-    const p = productosCache.find(x => x.sku === it.sku);
-    return p && p.stock_actual - it.cantidad < 0;
+    const p = productosCache.find(x=>x.sku===it.sku);
+    return p && p.stock_actual-it.cantidad<0;
   });
-  if (stockNeg.length > 0) {
-    if (!confirm(`⚠️ ${stockNeg.length} item(s) descontarán más stock del disponible (quedará negativo). ¿Continuar?`)) return;
+  if(stockNeg.length>0) {
+    if(!confirm(`⚠️ ${stockNeg.length} item(s) quedarán con stock negativo. ¿Continuar?`)) return;
   }
-
-  toast('Aplicando cambios...', 'info');
-
+  toast('Aplicando cambios...','info');
   try {
-    // 1. Aplicar movimientos: actualizar PRODUCTOS y append a MOVIMIENTOS
-    const movimientos = [];
-    const productosUpdate = [];
     const ts = new Date().toISOString();
-
-    for (const it of items) {
-      const p = productosCache.find(x => x.sku === it.sku);
-      const stockAntes = p.stock_actual;
-      const stockDespues = stockAntes - it.cantidad;
-
-      // Actualizar el cache
-      p.stock_actual = stockDespues;
-
-      movimientos.push([
-        fecha, it.sku, -it.cantidad, stockAntes, stockDespues,
-        it.precio, numFactura, userEmail, ts,
-      ]);
-
-      productosUpdate.push({ rowIndex: p._rowIndex, stock: stockDespues });
+    const movimientos = [];
+    for(const it of items) {
+      const p = productosCache.find(x=>x.sku===it.sku);
+      const antes = p.stock_actual;
+      p.stock_actual = antes - it.cantidad;
+      movimientos.push([fecha,it.sku,-it.cantidad,antes,p.stock_actual,it.precio,numFactura,userEmail,ts]);
     }
-
-    // 2. Append movimientos
-    await sheetsCall('POST', `${SHEET_MOVIMIENTOS}!A1`, { values: movimientos });
-
-    // 3. Update productos (uno por uno con el stock nuevo en columna D)
-    for (const u of productosUpdate) {
-      await sheetsCall('PUT', `${SHEET_PRODUCTOS}!D${u.rowIndex}`, { values: [[u.stock]] });
+    await sheetsCall('POST',`${SHEET_MOVIMIENTOS}!A1`,{values:movimientos});
+    for(const it of items) {
+      const p = productosCache.find(x=>x.sku===it.sku);
+      await sheetsCall('PUT',`${SHEET_PRODUCTOS}!D${p._rowIndex}`,{values:[[p.stock_actual]]});
     }
-
-    // 4. Append factura
-    await sheetsCall('POST', `${SHEET_FACTURAS}!A1`, {
-      values: [[
-        fecha, numFactura, $('revProveedor').value, parseFloat($('revTotal').value) || 0,
-        items.length, parsedFactura._hash, userEmail, ts,
-      ]],
-    });
-
-    toast(`✓ Factura confirmada · ${items.length} movimientos aplicados`, 'success');
-    parsedFactura = null;
-    $('reviewCard').classList.add('hidden');
-    $('dropzone').classList.remove('hidden');
-    renderStock();
-    cargarHistorial();
-  } catch (e) {
-    toast('Error: ' + e.message, 'error');
-  }
+    await sheetsCall('POST',`${SHEET_FACTURAS}!A1`,{values:[[fecha,numFactura,$('revProveedor').value,parseFloat($('revTotal').value)||0,items.length,parsedFactura._hash,userEmail,ts]]});
+    toast(`✓ ${items.length} movimientos aplicados`,'success');
+    parsedFactura=null; $('reviewCard').classList.add('hidden'); $('dropzone').classList.remove('hidden');
+    renderStock(); cargarHistorial();
+  } catch(e) { toast('Error: '+e.message,'error'); }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -833,99 +606,23 @@ async function confirmarFactura() {
 // ═══════════════════════════════════════════════════════════
 document.querySelectorAll('.tab').forEach(t => {
   t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(x => x.classList.add('hidden'));
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active-tab'));
     t.classList.add('active');
-    $('tab-' + t.dataset.tab).classList.remove('hidden');
+    $('tab-'+t.dataset.tab).classList.add('active-tab');
   });
 });
-
 $('searchStock').addEventListener('input', renderStock);
 
 function escapeHtml(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
-// Init al cargar
-window.addEventListener('load', () => setTimeout(initGoogle, 500));
+// Init
+window.addEventListener('load', () => setTimeout(initGoogleTokenClient, 300));
 </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
