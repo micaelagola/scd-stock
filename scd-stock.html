@@ -414,12 +414,12 @@ async function cargarHistorial() {
       <td style="font-family:monospace;">${escapeHtml(r[1]||'')}</td>
       <td style="text-align:right;color:${parseFloat(r[2])<0?'#c0392b':'#27ae60'};">${escapeHtml(r[2]||'')}</td>
       <td style="text-align:right;">${escapeHtml(r[3]||'')}</td>
-      <td style="text-align:right;font-weight:600;">${escapeHtml(r[4]||'')}</td>
       <td style="text-align:right;">${r[5]?'$'+parseFloat(r[5]).toLocaleString('es-AR'):'—'}</td>
       <td>${escapeHtml(r[6]||'')}</td>
     </tr>`).join('');
   } catch(e) { console.error(e); }
 }
+
 
 // ═══════════════════════════════════════════════════════════
 // DROPZONE + PARSER
@@ -433,6 +433,7 @@ $('fileInput').addEventListener('change', e => { if(e.target.files[0]) procesarA
   $('dropzone').addEventListener(ev, e => { e.preventDefault(); $('dropzone').classList.remove('drag'); });
 });
 $('dropzone').addEventListener('drop', e => { if(e.dataTransfer.files[0]) procesarArchivo(e.dataTransfer.files[0]); });
+
 
 async function procesarArchivo(file) {
   if(file.size > 10*1024*1024) { toast('Archivo > 10 MB', 'error'); return; }
@@ -453,8 +454,7 @@ async function procesarArchivo(file) {
     for(let i=1;i<=pdfDoc.numPages;i++) {
       const page = await pdfDoc.getPage(i);
       const content = await page.getTextContent();
-      text += content.items.map(it=>it.str).join(' ')+'
-';
+      text += content.items.map(it=>it.str).join(' ')+'\n';
     }
     if(text.trim().length < 30) throw new Error('PDF sin texto extraíble');
     $('parsingText').textContent = 'Analizando con Claude...';
@@ -468,6 +468,7 @@ async function procesarArchivo(file) {
   }
 }
 
+
 async function sha256(buf) {
   if(window.crypto && window.crypto.subtle) {
     try {
@@ -480,149 +481,3 @@ async function sha256(buf) {
   [0,100,1000,view.length-1000,view.length-100,view.length-1]
     .filter(i=>i>=0&&i<view.length)
     .forEach(i => hash += '_' + view[i].toString(16));
-  return hash;
-}
-async function callClaude(facturaTexto) {
-  const catalogo = productosCache.map(p => `${p.sku} | ${p.descripcion}${p.marca?' ('+p.marca+')':''}`).join('
-');
-  const systemPrompt = `Sos un parser experto de facturas. Extraé datos estructurados y matcheá cada línea con un SKU del catálogo.
-CATÁLOGO: ${catalogo}
-REGLAS: 1. SKU textual → usalo, confianza 0.95+. 2. Coincidencia descripción → matchealo, 0.7-0.9. 3. Sin match → sku_detectado=null. 4. Fecha ISO yyyy-mm-dd. 5. Cantidad positiva. 6. Solo JSON válido.
-FORMATO: {"numero_factura":"string|null","fecha_emision":"yyyy-mm-dd|null","proveedor":"string|null","monto_neto":number|null,"total":number|null,"items":[{"sku_detectado":"string|null","descripcion_detectada":"string","cantidad_detectada":number,"precio_unitario":number|null,"valor_total":number|null,"confianza":number}],"confianza_global":number}`;
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': _C.k,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5', max_tokens: 2000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: 'Factura:
-
-' + facturaTexto + '
-
-JSON.' }],
-    }),
-  });
-  if(!res.ok) throw new Error('Claude error ' + res.status);
-  const data = await res.json();
-  let txt = data.content[0].text.trim();
-  txt = txt.replace(/^```(?:json)?s*/i,'').replace(/s*```$/i,'');
-  return JSON.parse(txt);
-}
-
-// ═══════════════════════════════════════════════════════════
-// REVIEW
-// ═══════════════════════════════════════════════════════════
-function mostrarReview() {
-  $('revNumero').value = parsedFactura.numero_factura||'';
-  $('revFecha').value = parsedFactura.fecha_emision||'';
-  $('revProveedor').value = parsedFactura.proveedor||'';
-  $('revTotal').value = parsedFactura.total||'';
-  $('itemsBody').innerHTML = parsedFactura.items.map((it,idx) => {
-    const opts = productosCache.map(p =>
-      `<option value="${escapeHtml(p.sku)}" ${p.sku===it.sku_detectado?'selected':''}>${escapeHtml(p.sku)} — ${escapeHtml(p.descripcion.slice(0,50))} (stock: ${p.stock_actual})</option>`
-    ).join('');
-    const conf = it.confianza||0;
-    const confClass = conf>=0.8?'badge-green':conf>=0.5?'badge-yellow':'badge-red';
-    return `<tr>
-      <td><div style="font-weight:600;">${escapeHtml(it.descripcion_detectada||'')}</div>
-        <div class="small">Det: ${escapeHtml(it.sku_detectado||'—')} · ${it.cantidad_detectada} un.</div></td>
-      <td><select class="small-input" id="sku_${idx}" onchange="actualizarStock(${idx})">
-        <option value="">— SKU —</option>${opts}</select></td>
-      <td><input type="number" class="small-input" id="cant_${idx}" value="${it.cantidad_detectada||1}" min="1" onchange="actualizarStock(${idx})"></td>
-      <td id="stock_${idx}" style="text-align:right;font-size:13px;"></td>
-      <td><span class="badge ${confClass}">${Math.round(conf*100)}%</span></td>
-    </tr>`;
-  }).join('');
-  parsedFactura.items.forEach((_,i) => actualizarStock(i));
-  $('reviewCard').classList.remove('hidden');
-  $('reviewCard').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-function actualizarStock(idx) {
-  const sku = $(`sku_${idx}`).value;
-  const cant = parseFloat($(`cant_${idx}`).value)||0;
-  const prod = productosCache.find(p=>p.sku===sku);
-  if(!prod) { $(`stock_${idx}`).innerHTML='—'; return; }
-  const res = prod.stock_actual - cant;
-  const cls = res<0?'color:#c0392b;font-weight:700':'';
-  $(`stock_${idx}`).innerHTML = `<span style="${cls}">${prod.stock_actual} → ${res}</span>`;
-}
-
-function cancelarReview() {
-  parsedFactura = null;
-  $('reviewCard').classList.add('hidden');
-  $('dropzone').classList.remove('hidden');
-}
-
-async function confirmarFactura() {
-  if(!parsedFactura) return;
-  const items = [];
-  for(let i=0;i<parsedFactura.items.length;i++) {
-    const sku = $(`sku_${i}`).value;
-    const cant = parseFloat($(`cant_${i}`).value);
-    if(!sku) { toast(`Línea ${i+1}: falta SKU`,'error'); return; }
-    if(!cant||cant<=0) { toast(`Línea ${i+1}: cantidad inválida`,'error'); return; }
-    items.push({ sku, cantidad:cant, precio:parsedFactura.items[i].valor_total||0 });
-  }
-  const fecha = $('revFecha').value;
-  if(!fecha) { toast('Falta fecha','error'); return; }
-  const numFactura = $('revNumero').value||'(sin nº)';
-  const stockNeg = items.filter(it => {
-    const p = productosCache.find(x=>x.sku===it.sku);
-    return p && p.stock_actual-it.cantidad<0;
-  });
-  if(stockNeg.length>0) {
-    if(!confirm(`⚠️ ${stockNeg.length} item(s) quedarán con stock negativo. ¿Continuar?`)) return;
-  }
-  toast('Aplicando cambios...','info');
-  try {
-    const ts = new Date().toISOString();
-    const movimientos = [];
-    for(const it of items) {
-      const p = productosCache.find(x=>x.sku===it.sku);
-      const antes = p.stock_actual;
-      p.stock_actual = antes - it.cantidad;
-      movimientos.push([fecha,it.sku,-it.cantidad,antes,p.stock_actual,it.precio,numFactura,userEmail,ts]);
-    }
-    await sheetsCall('POST',`${SHEET_MOVIMIENTOS}!A1`,{values:movimientos});
-    for(const it of items) {
-      const p = productosCache.find(x=>x.sku===it.sku);
-      await sheetsCall('PUT',`${SHEET_PRODUCTOS}!D${p._rowIndex}`,{values:[[p.stock_actual]]});
-    }
-    await sheetsCall('POST',`${SHEET_FACTURAS}!A1`,{values:[[fecha,numFactura,$('revProveedor').value,parseFloat($('revTotal').value)||0,items.length,parsedFactura._hash,userEmail,ts]]});
-    toast(`✓ ${items.length} movimientos aplicados`,'success');
-    parsedFactura=null; $('reviewCard').classList.add('hidden'); $('dropzone').classList.remove('hidden');
-    renderStock(); cargarHistorial();
-  } catch(e) { toast('Error: '+e.message,'error'); }
-}
-
-// ═══════════════════════════════════════════════════════════
-// TABS + UTILS
-// ═══════════════════════════════════════════════════════════
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active-tab'));
-    t.classList.add('active');
-    $('tab-'+t.dataset.tab).classList.add('active-tab');
-  });
-});
-$('searchStock').addEventListener('input', renderStock);
-
-function escapeHtml(s) {
-  return String(s==null?'':s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-
-// Init
-window.addEventListener('load', () => setTimeout(initGoogleTokenClient, 300));
-</script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-</body>
-</html>
