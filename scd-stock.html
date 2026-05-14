@@ -122,14 +122,14 @@ iframe { border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; height: 600
         </div>
         <div id="parsing" class="parsing hidden">
           <div class="spinner"></div>
-          <div id="parsingText">Analizando con Claude...</div>
+          <div id="parsingText">Analizando factura...</div>
         </div>
       </div>
 
       <!-- Review -->
       <div class="card hidden" id="reviewCard">
         <h2 style="margin-bottom:16px;">Revisar factura</h2>
-        <p class="small" style="margin-bottom:16px;">Verificá los datos antes de descontar el stock. Si Claude se equivocó, corregilo acá.</p>
+        <p class="small" style="margin-bottom:16px;">Verificá los datos antes de descontar el stock. Verificá los datos. Si algo no está bien, corregilo acá.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;">
           <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Nº Factura</label><input id="revNumero" type="text" placeholder="Nº Factura"></div>
           <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Fecha</label><input id="revFecha" type="date"></div>
@@ -195,10 +195,7 @@ iframe { border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; height: 600
 // ═══════════════════════════════════════════════════════════
 // CONFIG INTERNA (no visible para el usuario)
 // ═══════════════════════════════════════════════════════════
-const _C = {
-  k: atob('c2stYW50LWFwaTAzLWFRUjNfYk1CbW12a2lVWjRMSjdPTUFRZkx4SmMwajRJSlhER0pvM1lUSFYxajhqYUdJbGtHRmV6a0pqVE9xUHY3UGhNU1B5dkdHdHJCR011MU5rcURfZy1Xc2FvNVFBQQ=='),
-  s: '15pDb_HIO7ufbuImUOoJo-6DdYqsv1ZLeZil_hZQpJ54',
-};
+const _C = { s: '15pDb_HIO7ufbuImUOoJo-6DdYqsv1ZLeZil_hZQpJ54' };
 
 // ═══════════════════════════════════════════════════════════
 // AUTENTICACIÓN SIMPLE
@@ -456,7 +453,7 @@ async function procesarArchivo(file) {
       text += content.items.map(it=>it.str).join(' ')+'\n';
     }
     if(text.trim().length < 30) throw new Error('PDF sin texto extraíble');
-    $('parsingText').textContent = 'Analizando con Claude...';
+    $('parsingText').textContent = 'Analizando factura...';
     parsedFactura = await callClaude(text);
     parsedFactura._hash = hash; parsedFactura._fileName = file.name;
     mostrarReview();
@@ -482,30 +479,155 @@ async function sha256(buf) {
   return hash;
 }
 async function callClaude(facturaTexto) {
-  const catalogo = productosCache.map(p => `${p.sku} | ${p.descripcion}${p.marca?' ('+p.marca+')':''}`).join('\n');
-  const systemPrompt = `Sos un parser experto de facturas. Extraé datos estructurados y matcheá cada línea con un SKU del catálogo.
-CATÁLOGO: ${catalogo}
-REGLAS: 1. SKU textual → usalo, confianza 0.95+. 2. Coincidencia descripción → matchealo, 0.7-0.9. 3. Sin match → sku_detectado=null. 4. Fecha ISO yyyy-mm-dd. 5. Cantidad positiva. 6. Solo JSON válido.
-FORMATO: {"numero_factura":"string|null","fecha_emision":"yyyy-mm-dd|null","proveedor":"string|null","monto_neto":number|null,"total":number|null,"items":[{"sku_detectado":"string|null","descripcion_detectada":"string","cantidad_detectada":number,"precio_unitario":number|null,"valor_total":number|null,"confianza":number}],"confianza_global":number}`;
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': _C.k,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5', max_tokens: 2000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: 'Factura:\n\n' + facturaTexto + '\n\nJSON.' }],
-    }),
-  });
-  if(!res.ok) throw new Error('Claude error ' + res.status);
-  const data = await res.json();
-  let txt = data.content[0].text.trim();
-  txt = txt.replace(/^```(?:json)?s*/i,'').replace(/s*```$/i,'');
-  return JSON.parse(txt);
+  // Parser de facturas sin IA - usa regex para extraer datos de facturas electronicas
+  const texto = facturaTexto;
+
+  // --- Numero de factura ---
+  let numero_factura = null;
+  const mNumero = texto.match(/N[oOºº°u]?s*[:#]?s*(d+)/i) ||
+                  texto.match(/FACTURA[^\n]*?(d{3,})/i);
+  if (mNumero) numero_factura = mNumero[1];
+
+  // --- Fecha de emision ---
+  let fecha_emision = null;
+  // Formato: "08 de Mayo del 2026" o "08/05/2026" o "2026-05-08"
+  const MESES = {enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,
+                 julio:7,agosto:8,septiembre:9,octubre:10,noviembre:11,diciembre:12};
+  const mFechaLarga = texto.match(/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+del?\s+(\d{4})/i);
+  if (mFechaLarga) {
+    const d = mFechaLarga[1].padStart(2,'0');
+    const m = String(MESES[mFechaLarga[2].toLowerCase()]).padStart(2,'0');
+    const y = mFechaLarga[3];
+    fecha_emision = y + '-' + m + '-' + d;
+  } else {
+    const mFechaNum = texto.match(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
+    if (mFechaNum) {
+      const d = mFechaNum[1].padStart(2,'0');
+      const mo = mFechaNum[2].padStart(2,'0');
+      fecha_emision = mFechaNum[3] + '-' + mo + '-' + d;
+    }
+  }
+
+  // --- Proveedor: nombre del emisor (primera linea con nombre de empresa) ---
+  let proveedor = null;
+  // Buscar el nombre de la empresa emisora (suele estar al inicio, en mayusculas o bold)
+  const mProveedor = texto.match(/^([A-Z][A-Z\s\.&,]+(?:SPA|S\.A\.|LTDA|EIRL|SRL)?)/m);
+  if (mProveedor) proveedor = mProveedor[1].trim();
+
+  // --- Montos ---
+  let monto_neto = null, total = null;
+  const mNeto = texto.match(/MONTO\s+NETO\s*\$?\s*([\d,.]+)/i);
+  if (mNeto) monto_neto = parseFloat(mNeto[1].replace(/[.,]/g, m => m === ',' ? '' : '.')) || null;
+  // Intentar limpiar numeros chilenos (punto=miles, coma=decimal)
+  function parseMonto(str) {
+    if (!str) return null;
+    // Si tiene punto y coma: 1.234,56 -> 1234.56; si solo punto al final: 100.832 -> 100832
+    let s = str.trim().replace(/\s/g,'');
+    if (s.includes(',')) {
+      s = s.replace(/\./g,'').replace(',','.');
+    } else {
+      s = s.replace(/\./g,'');
+    }
+    return parseFloat(s) || null;
+  }
+  const mTotal = texto.match(/TOTAL\s*\$?\s*([\d.,]+)/i);
+  if (mTotal) total = parseMonto(mTotal[1]);
+  if (!monto_neto && mNeto) monto_neto = parseMonto(mNeto[1]);
+
+  // --- Items / productos ---
+  const items = [];
+  // La tabla de productos: buscar lineas con patron: CODIGO DESCRIPCION CANTIDAD PRECIO VALOR
+  // Patron tipico en facturas electronicas chilenas
+  // Cada item: codigo (opcional), descripcion, cantidad (numero + UN), precio unitario, valor total
+  const lineas = texto.split('\n');
+  for (let i = 0; i < lineas.length; i++) {
+    const linea = lineas[i].trim();
+    // Detectar lineas de items: deben tener numeros al final y cantidad tipo "1 UN" o solo numeros
+    // Patron: algo ... numero UN ... precio ... valor
+    const mItem = linea.match(/^(.+?)\s+(\d+)\s+(?:UN|un|Und|PZA)?\s+([\d.,]+)\s+[\d.,]*\s+([\d.,]+)\s*$/);
+    if (mItem) {
+      const descripcion = mItem[1].trim();
+      // Ignorar si es encabezado de tabla
+      if (/codigo|descripcion|cantidad|precio|valor/i.test(descripcion)) continue;
+      // Ignorar si parece ser linea de totales
+      if (/neto|iva|total|impuesto|forma/i.test(descripcion)) continue;
+      const cantidad = parseFloat(mItem[2]) || 1;
+      const precio_unitario = parseMonto(mItem[3]);
+      const valor_total = parseMonto(mItem[4]);
+      // Intentar matchear con catalogo
+      let sku_detectado = null;
+      let confianza = 0.5;
+      for (const prod of productosCache) {
+        if (descripcion.toLowerCase().includes(prod.sku.toLowerCase()) ||
+            prod.sku.toLowerCase().includes(descripcion.toLowerCase())) {
+          sku_detectado = prod.sku;
+          confianza = 0.95;
+          break;
+        }
+        if (descripcion.toLowerCase().includes(prod.descripcion.toLowerCase().substring(0,8)) ||
+            prod.descripcion.toLowerCase().includes(descripcion.toLowerCase().substring(0,8))) {
+          sku_detectado = prod.sku;
+          confianza = 0.75;
+        }
+      }
+      items.push({ sku_detectado, descripcion_detectada: descripcion, cantidad_detectada: cantidad,
+                   precio_unitario, valor_total, confianza });
+    } else {
+      // Patron alternativo mas simple para facturas donde SKU y descripcion estan juntos
+      // Linea tipo: "WT-GWP30  Venta #200..." con la cantidad en linea siguiente o misma linea
+      const mSku = linea.match(/^([A-Z][A-Z0-9\-]{2,})/);
+      if (mSku) {
+        const skuCandidate = mSku[1];
+        const prod = productosCache.find(p => p.sku.toUpperCase() === skuCandidate.toUpperCase());
+        if (prod) {
+          // Buscar cantidad en esta linea o siguiente
+          const mCant = linea.match(/(\d+)\s+(?:UN|un)/);
+          const cantNum = mCant ? parseFloat(mCant[1]) : 1;
+          // Buscar valor al final de la linea
+          const mVal = linea.match(/([\d.,]+)\s*$/);
+          const valTotal = mVal ? parseMonto(mVal[1]) : null;
+          items.push({
+            sku_detectado: prod.sku,
+            descripcion_detectada: linea,
+            cantidad_detectada: cantNum,
+            precio_unitario: null,
+            valor_total: valTotal,
+            confianza: 0.95
+          });
+        }
+      }
+    }
+  }
+
+  // Si no encontramos items con los patrones anteriores, intentar otro enfoque
+  // Buscar todas las lineas que contengan SKUs del catalogo
+  if (items.length === 0 && productosCache.length > 0) {
+    for (const prod of productosCache) {
+      const skuRegex = new RegExp(prod.sku.replace(/[-]/g,'\\-'), 'i');
+      if (skuRegex.test(texto)) {
+        const mCant = texto.match(new RegExp(prod.sku + '[\\s\\S]{0,100}?(\\d+)\\s+(?:UN|un)', 'i'));
+        const cantNum = mCant ? parseFloat(mCant[1]) : 1;
+        items.push({
+          sku_detectado: prod.sku,
+          descripcion_detectada: prod.sku + ' - ' + prod.descripcion,
+          cantidad_detectada: cantNum,
+          precio_unitario: null,
+          valor_total: null,
+          confianza: 0.85
+        });
+      }
+    }
+  }
+
+  return {
+    numero_factura,
+    fecha_emision,
+    proveedor,
+    monto_neto,
+    total,
+    items,
+    confianza_global: items.length > 0 ? 0.85 : 0.4
+  };
 }
 
 // ═══════════════════════════════════════════════════════════
